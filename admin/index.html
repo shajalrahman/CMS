@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlanKraft CMS — Admin</title>
+<link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════ */
+/*  PLANKRAFT CMS — VIBRANT ADMIN PANEL                   */
+/* ═══════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-deep:#0a0612;
+  --bg-surface:rgba(255,255,255,0.04);
+  --bg-card:rgba(255,255,255,0.06);
+  --bg-card-hover:rgba(255,255,255,0.1);
+  --bg-input:rgba(255,255,255,0.07);
+  --border:rgba(255,255,255,0.08);
+  --border-focus:rgba(139,92,246,0.5);
+  --text:#f0eef5;
+  --text-muted:rgba(240,238,245,0.5);
+  --text-dim:rgba(240,238,245,0.3);
+  --violet:#8b5cf6;
+  --pink:#ec4899;
+  --cyan:#06b6d4;
+  --amber:#f59e0b;
+  --coral:#f97316;
+  --emerald:#10b981;
+  --red:#ef4444;
+  --sidebar-w:260px;
+  --radius:12px;
+  --radius-sm:8px;
+  --ff-head:'Outfit',sans-serif;
+  --ff-body:'Inter',sans-serif;
+  --transition:0.3s cubic-bezier(0.22,1,0.36,1);
+}
+html{font-size:15px;scroll-behavior:smooth}
+body{
+  font-family:var(--ff-body);
+  background:var(--bg-deep);
+  color:var(--text);
+  overflow-x:hidden;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(139,92,246,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 70%, rgba(236,72,153,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(6,182,212,0.05) 0%, transparent 50%);
+}
+
+/* ═══ SCROLLBAR ═══ */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(139,92,246,0.3);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:rgba(139,92,246,0.5)}
+
+/* ═══ LOGIN SCREEN ═══ */
+#loginScreen{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg-deep);
+}
+#loginScreen::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 60% at 30% 40%, rgba(139,92,246,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 70% 60%, rgba(236,72,153,0.1) 0%, transparent 50%);
+}
+.login-card{
+  position:relative;z-index:1;
+  width:400px;max-width:90vw;
+  background:var(--bg-card);
+  backdrop-filter:blur(40px);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:3rem;
+  box-shadow:0 40px 80px rgba(0,0,0,0.4);
+  animation:cardFloat 0.8s ease both;
+}
+@keyframes cardFloat{from{opacity:0;transform:translateY(30px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.login-card h1{
+  font-family:var(--ff-head);font-size:2rem;font-weight:800;
+  text-align:center;margin-bottom:0.5rem;
+  background:linear-gradient(135deg,var(--violet),var(--pink),var(--coral));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.login-card .subtitle{text-align:center;color:var(--text-muted);font-size:0.85rem;margin-bottom:2rem}
+.login-error{
+  background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);
+  color:var(--red);font-size:0.8rem;padding:0.6rem 1rem;border-radius:var(--radius-sm);
+  margin-bottom:1rem;display:none;text-align:center;
+}
+.form-field{margin-bottom:1.25rem;position:relative}
+.form-field label{
+  display:block;font-size:0.72rem;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:0.5rem;
+}
+.form-field input,.form-field textarea,.form-field select{
+  width:100%;padding:0.75rem 1rem;
+  background:var(--bg-input);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text);
+  font-family:var(--ff-body);font-size:0.9rem;
+  outline:none;transition:border-color var(--transition),box-shadow var(--transition);
+}
+.form-field input:focus,.form-field textarea:focus,.form-field select:focus{
+  border-color:var(--border-focus);
+  box-shadow:0 0 0 3px rgba(139,92,246,0.15);
+}
+.form-field textarea{resize:vertical;min-height:80px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;
+  padding:0.7rem 1.5rem;border:none;border-radius:var(--radius-sm);
+  font-family:var(--ff-body);font-size:0.85rem;font-weight:600;
+  cursor:pointer;transition:all var(--transition);
+  position:relative;overflow:hidden;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--violet),var(--pink));
+  color:#fff;box-shadow:0 4px 20px rgba(139,92,246,0.3);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(139,92,246,0.4)}
+.btn-ghost{background:var(--bg-card);color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg-card-hover);border-color:rgba(255,255,255,0.15)}
+.btn-danger{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.2)}
+.btn-danger:hover{background:rgba(239,68,68,0.25)}
+.btn-success{background:rgba(16,185,129,0.15);color:var(--emerald);border:1px solid rgba(16,185,129,0.2)}
+.btn-success:hover{background:rgba(16,185,129,0.25)}
+.btn-full{width:100%}
+.btn-sm{padding:0.45rem 0.9rem;font-size:0.78rem}
+
+/* ═══ SIDEBAR ═══ */
+#adminApp{display:none}
+.admin-layout{display:flex;min-height:100vh;position:relative;z-index:1}
+.sidebar{
+  position:fixed;top:0;left:0;bottom:0;
+  width:var(--sidebar-w);z-index:50;
+  background:linear-gradient(180deg,rgba(20,10,40,0.95) 0%,rgba(15,8,30,0.98) 100%);
+  backdrop-filter:blur(30px);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;
+}
+.sidebar-brand{
+  padding:1.5rem;display:flex;align-items:center;gap:0.75rem;
+  border-bottom:1px solid var(--border);
+}
+.sidebar-brand-icon{
+  width:40px;height:40px;border-radius:12px;
+  background:linear-gradient(135deg,var(--violet),var(--pink));
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-head);font-weight:900;font-size:1.1rem;color:#fff;
+}
+.sidebar-brand-text{font-family:var(--ff-head);font-weight:700;font-size:1.05rem}
+.sidebar-brand-text span{
+  font-size:0.65rem;display:block;color:var(--text-muted);font-weight:400;
+  letter-spacing:0.06em;text-transform:uppercase;
+}
+.sidebar-nav{flex:1;padding:1rem 0.75rem}
+.nav-section-label{
+  font-size:0.6rem;font-weight:700;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--text-dim);
+  padding:1rem 0.75rem 0.5rem;
+}
+.nav-item{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.65rem 0.85rem;margin-bottom:2px;
+  border-radius:var(--radius-sm);cursor:pointer;
+  font-size:0.85rem;font-weight:500;color:var(--text-muted);
+  transition:all var(--transition);position:relative;
+}
+.nav-item:hover{color:var(--text);background:var(--bg-card)}
+.nav-item.active{
+  color:#fff;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(236,72,153,0.15));
+  border:1px solid rgba(139,92,246,0.2);
+}
+.nav-item.active::before{
+  content:'';position:absolute;left:-0.75rem;top:50%;transform:translateY(-50%);
+  width:3px;height:60%;border-radius:0 3px 3px 0;
+  background:linear-gradient(180deg,var(--violet),var(--pink));
+}
+.nav-item svg{width:18px;height:18px;flex-shrink:0;opacity:0.7}
+.nav-item.active svg{opacity:1}
+.sidebar-footer{
+  padding:1rem 1.25rem;border-top:1px solid var(--border);
+  display:flex;flex-direction:column;gap:0.5rem;
+}
+
+/* ═══ MAIN CONTENT ═══ */
+.main-content{
+  flex:1;margin-left:var(--sidebar-w);
+  padding:2rem 2.5rem;
+  min-height:100vh;
+}
+.page-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:2rem;padding-bottom:1.5rem;
+  border-bottom:1px solid var(--border);
+}
+.page-header h2{
+  font-family:var(--ff-head);font-size:1.8rem;font-weight:800;
+  background:linear-gradient(135deg,var(--text),rgba(240,238,245,0.7));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.page-header .page-desc{color:var(--text-muted);font-size:0.85rem;margin-top:0.25rem}
+
+/* ═══ CARDS ═══ */
+.card{
+  background:var(--bg-card);backdrop-filter:blur(20px);
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.75rem;margin-bottom:1.5rem;
+  transition:border-color var(--transition);
+}
+.card:hover{border-color:rgba(255,255,255,0.12)}
+.card-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:1.25rem;
+}
+.card-title{
+  font-family:var(--ff-head);font-size:1.1rem;font-weight:700;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.card-title .icon{
+  width:28px;height:28px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.9rem;
+}
+.card-title .icon.violet{background:rgba(139,92,246,0.15);color:var(--violet)}
+.card-title .icon.pink{background:rgba(236,72,153,0.15);color:var(--pink)}
+.card-title .icon.cyan{background:rgba(6,182,212,0.15);color:var(--cyan)}
+.card-title .icon.amber{background:rgba(245,158,11,0.15);color:var(--amber)}
+.card-title .icon.coral{background:rgba(249,115,22,0.15);color:var(--coral)}
+.card-title .icon.emerald{background:rgba(16,185,129,0.15);color:var(--emerald)}
+
+/* ═══ GOOGLE PREVIEW ═══ */
+.google-preview{
+  background:#fff;border-radius:12px;padding:1.25rem 1.5rem;
+  max-width:600px;margin-top:1rem;
+  font-family:Arial,sans-serif;
+}
+.gp-url{font-size:0.8rem;color:#202124;display:flex;align-items:center;gap:0.4rem;margin-bottom:0.2rem}
+.gp-url .favicon{width:18px;height:18px;border-radius:50%;background:#f4f3f1}
+.gp-url span{color:#4d5156;font-size:0.75rem}
+.gp-title{font-size:1.2rem;color:#1a0dab;margin-bottom:0.2rem;font-weight:400;cursor:pointer}
+.gp-title:hover{text-decoration:underline}
+.gp-desc{font-size:0.85rem;color:#4d5156;line-height:1.5}
+
+/* ═══ SECTION PANELS ═══ */
+.section-panel{display:none}
+.section-panel.active{display:block;animation:fadeSlide 0.4s ease both}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ GRID LAYOUTS ═══ */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+
+/* ═══ MEDIA GRID ═══ */
+.media-item{
+  position:relative;border-radius:var(--radius);overflow:hidden;
+  aspect-ratio:4/3;background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);cursor:pointer;
+  transition:all var(--transition);
+}
+.media-item:hover{border-color:rgba(139,92,246,0.3);transform:scale(1.02)}
+.media-item img,.media-item video{width:100%;height:100%;object-fit:cover;display:block}
+.media-item.hidden-media{opacity:0.4;filter:grayscale(0.8)}
+.media-item .media-badge{
+  position:absolute;top:0.5rem;left:0.5rem;
+  background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);
+  padding:0.2rem 0.6rem;border-radius:99px;
+  font-size:0.65rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+.media-item .media-badge.hidden-badge{background:rgba(239,68,68,0.6);color:#fff}
+.media-item .media-actions{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:0.6rem;background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);
+  display:flex;gap:0.4rem;justify-content:flex-end;
+  opacity:0;transition:opacity 0.3s;
+}
+.media-item:hover .media-actions{opacity:1}
+.media-actions .action-btn{
+  width:30px;height:30px;border-radius:8px;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;transition:all 0.2s;
+}
+.action-btn.hide-btn{background:rgba(245,158,11,0.8);color:#000}
+.action-btn.del-btn{background:rgba(239,68,68,0.8);color:#fff}
+.action-btn:hover{transform:scale(1.1)}
+
+/* ═══ ACCORDION ═══ */
+.accordion{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem}
+.accordion-header{
+  padding:1rem 1.25rem;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--bg-card);font-weight:600;font-size:0.9rem;
+  transition:background var(--transition);
+}
+.accordion-header:hover{background:var(--bg-card-hover)}
+.accordion-header .arrow{
+  transition:transform 0.3s;font-size:0.7rem;color:var(--text-muted);
+}
+.accordion.open .accordion-header .arrow{transform:rotate(180deg)}
+.accordion-body{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.5s cubic-bezier(0.22,1,0.36,1);
+}
+.accordion.open .accordion-body{max-height:5000px}
+.accordion-inner{padding:1.25rem}
+
+/* ═══ UPLOAD ZONE ═══ */
+.upload-zone{
+  border:2px dashed rgba(139,92,246,0.3);border-radius:var(--radius);
+  padding:2rem;text-align:center;cursor:pointer;
+  transition:all var(--transition);
+  background:rgba(139,92,246,0.03);
+}
+.upload-zone:hover{border-color:var(--violet);background:rgba(139,92,246,0.08)}
+.upload-zone .upload-icon{font-size:2rem;margin-bottom:0.5rem}
+.upload-zone p{color:var(--text-muted);font-size:0.85rem}
+.upload-zone .upload-hint{font-size:0.72rem;color:var(--text-dim);margin-top:0.25rem}
+
+/* ═══ TOGGLE SWITCH ═══ */
+.toggle{position:relative;width:44px;height:24px;cursor:pointer;display:inline-block}
+.toggle input{display:none}
+.toggle-slider{
+  position:absolute;inset:0;border-radius:99px;
+  background:rgba(255,255,255,0.1);border:1px solid var(--border);
+  transition:all 0.3s;
+}
+.toggle-slider::after{
+  content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;
+  border-radius:50%;background:#fff;transition:all 0.3s;
+}
+.toggle input:checked+.toggle-slider{background:var(--violet);border-color:var(--violet)}
+.toggle input:checked+.toggle-slider::after{transform:translateX(20px)}
+
+/* ═══ TOAST ═══ */
+.toast-container{position:fixed;top:1.5rem;right:1.5rem;z-index:10000;display:flex;flex-direction:column;gap:0.5rem}
+.toast{
+  padding:0.75rem 1.25rem;border-radius:var(--radius-sm);
+  font-size:0.85rem;font-weight:500;
+  backdrop-filter:blur(20px);border:1px solid;
+  animation:toastIn 0.4s ease both;min-width:250px;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.toast.success{background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.3);color:var(--emerald)}
+.toast.error{background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3);color:var(--red)}
+.toast.info{background:rgba(139,92,246,0.15);border-color:rgba(139,92,246,0.3);color:var(--violet)}
+@keyframes toastIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(30px)}}
+
+/* ═══ STAT CARDS ═══ */
+.stat-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.5rem;
+  display:flex;flex-direction:column;gap:0.5rem;
+  transition:all var(--transition);
+}
+.stat-card:hover{border-color:rgba(139,92,246,0.2);transform:translateY(-2px)}
+.stat-card .stat-value{
+  font-family:var(--ff-head);font-size:2rem;font-weight:800;
+}
+.stat-card .stat-label{font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}
+
+/* ═══ CHAR COUNTER ═══ */
+.char-counter{
+  font-size:0.7rem;color:var(--text-dim);text-align:right;margin-top:0.25rem;
+}
+.char-counter.warn{color:var(--amber)}
+.char-counter.over{color:var(--red)}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  .sidebar{width:100%;height:auto;position:relative;border-right:none;border-bottom:1px solid var(--border)}
+  .main-content{margin-left:0;padding:1.5rem}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  :root{--sidebar-w:0px}
+}
+
+/* ═══ FLEX UTILS ═══ */
+.flex{display:flex}.flex-col{flex-direction:column}.gap-sm{gap:0.5rem}.gap-md{gap:1rem}.gap-lg{gap:1.5rem}
+.items-center{align-items:center}.justify-between{justify-content:space-between}
+.mt-1{margin-top:0.5rem}.mt-2{margin-top:1rem}.mt-3{margin-top:1.5rem}
+.mb-1{margin-bottom:0.5rem}.mb-2{margin-bottom:1rem}
+.text-sm{font-size:0.8rem}.text-muted{color:var(--text-muted)}
+.font-head{font-family:var(--ff-head)}
+.w-full{width:100%}
+.hidden{display:none!important}
+
+/* ═══ INLINE FIELD ROW ═══ */
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:700px){.field-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ -->
+<!-- LOGIN SCREEN                        -->
+<!-- ═══════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>PlanKraft CMS</h1>
+    <p class="subtitle">Content Management System</p>
+    <div class="login-error" id="loginError">Invalid username or password</div>
+    <div class="form-field">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="Enter username" autocomplete="off">
+    </div>
+    <div class="form-field">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="Enter password">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="handleLogin()" style="margin-top:0.5rem">
+      Sign In →
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- ADMIN APP                           -->
+<!-- ═══════════════════════════════════ -->
+<div id="adminApp">
+<div class="admin-layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-icon">P</div>
+    <div class="sidebar-brand-text">PlanKraft<span>CMS Admin</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item active" data-section="dashboard" onclick="showSection('dashboard',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+
+    <div class="nav-section-label">Global</div>
+    <div class="nav-item" data-section="settings" onclick="showSection('settings',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M16.36 16.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M16.36 7.64l1.42-1.42"/></svg>
+      Site Settings
+    </div>
+    <div class="nav-item" data-section="media" onclick="showSection('media',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      Media Manager
+    </div>
+
+    <div class="nav-section-label">Pages</div>
+    <div class="nav-item" data-section="page-home" onclick="showSection('page-home',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      Home Page
+    </div>
+    <div class="nav-item" data-section="page-about" onclick="showSection('page-about',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      About Page
+    </div>
+    <div class="nav-item" data-section="page-services" onclick="showSection('page-services',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      Services Page
+    </div>
+    <div class="nav-item" data-section="page-contact" onclick="showSection('page-contact',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Contact Page
+    </div>
+    <div class="nav-item" data-section="page-gallery" onclick="showSection('page-gallery',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      Gallery Pages
+    </div>
+
+    <div class="nav-section-label">Components</div>
+    <div class="nav-item" data-section="hero" onclick="showSection('hero',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+      Hero Carousel
+    </div>
+    <div class="nav-item" data-section="reviews" onclick="showSection('reviews',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Reviews
+    </div>
+    <div class="nav-item" data-section="ticker" onclick="showSection('ticker',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+      Stats Ticker
+    </div>
+
+    <div class="nav-section-label">System</div>
+    <div class="nav-item" data-section="export" onclick="showSection('export',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export / Import
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <button class="btn btn-ghost btn-sm btn-full" onclick="handleLogout()">⎋ Logout</button>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+
+<!-- ═══ DASHBOARD ═══ -->
+<div class="section-panel active" id="sec-dashboard">
+  <div class="page-header">
+    <div><h2>Dashboard</h2><p class="page-desc">Welcome to PlanKraft CMS</p></div>
+  </div>
+  <div class="grid-4" id="dashStats"></div>
+  <div class="card mt-3">
+    <div class="card-title"><span class="icon violet">⚡</span> Quick Actions</div>
+    <div class="flex gap-md mt-2" style="flex-wrap:wrap">
+      <button class="btn btn-ghost" onclick="showSection('settings',document.querySelector('[data-section=settings]'))">✏️ Edit Site Title</button>
+      <button class="btn btn-ghost" onclick="showSection('media',document.querySelector('[data-section=media]'))">🖼️ Manage Media</button>
+      <button class="btn btn-ghost" onclick="showSection('page-home',document.querySelector('[data-section=page-home]'))">📄 Edit Home Page</button>
+      <button class="btn btn-ghost" onclick="showSection('export',document.querySelector('[data-section=export]'))">📦 Export Data</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SITE SETTINGS ═══ -->
+<div class="section-panel" id="sec-settings">
+  <div class="page-header">
+    <div><h2>Site Settings</h2><p class="page-desc">Global website configuration</p></div>
+    <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <div class="card-title"><span class="icon violet">🏷️</span> Website Identity</div>
+        <div class="form-field mt-2">
+          <label>Site Title</label>
+          <input type="text" id="set-siteTitle" placeholder="PlanKraft">
+        </div>
+        <div class="form-field">
+          <label>Company Full Name</label>
+          <input type="text" id="set-companyName" placeholder="PlanKraft Engineers & Builders">
+        </div>
+        <div class="form-field">
+          <label>Copyright Text</label>
+          <input type="text" id="set-copyright" placeholder="© 2019 Copyright All rights reserved...">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon pink">📱</span> Social Media Links</div>
+        <div class="form-field mt-2">
+          <label>Facebook URL</label>
+          <input type="url" id="set-facebook" placeholder="https://facebook.com/...">
+        </div>
+        <div class="form-field">
+          <label>Instagram URL</label>
+          <input type="url" id="set-instagram" placeholder="https://instagram.com/...">
+        </div>
+        <div class="form-field">
+          <label>WhatsApp URL</label>
+          <input type="url" id="set-whatsapp" placeholder="https://api.whatsapp.com/...">
+        </div>
+        <div class="form-field">
+          <label>YouTube URL</label>
+          <input type="url" id="set-youtube" placeholder="https://youtube.com/...">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-title"><span class="icon cyan">🔍</span> Google Search Result (SEO)</div>
+        <div class="form-field mt-2">
+          <label>Meta Title (max 60 chars)</label>
+          <input type="text" id="set-metaTitle" placeholder="PlanKraft Engineers & Builders | Architecture in Kerala" maxlength="70" oninput="updateCharCount(this,60)">
+          <div class="char-counter" id="cc-metaTitle">0 / 60</div>
+        </div>
+        <div class="form-field">
+          <label>Meta Description (max 160 chars)</label>
+          <textarea id="set-metaDesc" placeholder="Premium architecture, engineering, and construction services in Calicut, Kerala..." maxlength="170" rows="3" oninput="updateCharCount(this,160)"></textarea>
+          <div class="char-counter" id="cc-metaDesc">0 / 160</div>
+        </div>
+        <p class="text-sm text-muted mb-1 mt-2">Preview:</p>
+        <div class="google-preview">
+          <div class="gp-url"><div class="favicon"></div> plankraft.in <span>› ...</span></div>
+          <div class="gp-title" id="gp-title">PlanKraft Engineers & Builders</div>
+          <div class="gp-desc" id="gp-desc">Premium architecture and construction...</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="icon amber">📍</span> Contact Information</div>
+        <div class="form-field mt-2">
+          <label>Address</label>
+          <textarea id="set-address" rows="2" placeholder="CM Complex, Near Salafi Masjid..."></textarea>
+        </div>
+        <div class="form-field">
+          <label>Email</label>
+          <input type="email" id="set-email" placeholder="info.plankraft@gmail.com">
+        </div>
+        <div class="field-row">
+          <div class="form-field">
+            <label>Phone 1</label>
+            <input type="tel" id="set-phone1" placeholder="+91 82818 16333">
+          </div>
+          <div class="form-field">
+            <label>Phone 2</label>
+            <input type="tel" id="set-phone2" placeholder="+91 96458 16333">
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Google Maps URL</label>
+          <input type="url" id="set-mapsUrl" placeholder="https://maps.app.goo.gl/...">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MEDIA MANAGER ═══ -->
+<div class="section-panel" id="sec-media">
+  <div class="page-header">
+    <div><h2>Media Manager</h2><p class="page-desc">Manage all images and videos</p></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><span class="icon violet">📤</span> Upload New Media</div>
+    </div>
+    <div class="upload-zone" onclick="document.getElementById('mediaUpload').click()">
+      <div class="upload-icon">🖼️</div>
+      <p>Click to upload images</p>
+      <p class="upload-hint">JPG, PNG, WEBP — stored in browser localStorage</p>
+    </div>
+    <input type="file" id="mediaUpload" accept="image/*" multiple style="display:none" onchange="handleMediaUpload(this.files)">
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><span class="icon pink">🖼️</span> Gallery Images</div>
+      <span class="text-sm text-muted" id="mediaCount">0 images</span>
+    </div>
+    <div class="grid-4" id="mediaGrid"></div>
+    <p class="text-sm text-muted mt-2" id="mediaEmpty">No custom images uploaded yet. The site uses default images from /assets/.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><span class="icon cyan">👁️</span> Default Image Visibility</div>
+    </div>
+    <p class="text-sm text-muted mb-2">Toggle which default images are shown on the front-end.</p>
+    <div class="grid-4" id="defaultMediaGrid"></div>
+  </div>
+</div>
+
+<!-- ═══ HOME PAGE EDITOR ═══ -->
+<div class="section-panel" id="sec-page-home">
+  <div class="page-header">
+    <div><h2>Home Page</h2><p class="page-desc">Edit all text content on the home page</p></div>
+    <button class="btn btn-primary" onclick="savePageContent('home')">💾 Save Changes</button>
+  </div>
+
+  <div class="accordion open" id="acc-home-hero">
+    <div class="accordion-header" onclick="toggleAccordion(this)">🏠 Hero Section <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>Hero Title</label><input type="text" data-page="home" data-field="heroTitle" placeholder="PlanKraft"></div>
+      <div class="form-field"><label>Hero Subtitle</label><textarea data-page="home" data-field="heroSubtitle" rows="2" placeholder="Timeless Architecture\nCrafted For Modern Living"></textarea></div>
+      <div class="field-row">
+        <div class="form-field"><label>Stat 1</label><input type="text" data-page="home" data-field="heroStat1" placeholder="80+ Projects"></div>
+        <div class="form-field"><label>Stat 2</label><input type="text" data-page="home" data-field="heroStat2" placeholder="Residential & Commercial"></div>
+      </div>
+      <div class="form-field"><label>Stat 3</label><input type="text" data-page="home" data-field="heroStat3" placeholder="Kerala"></div>
+    </div></div>
+  </div>
+
+  <div class="accordion" id="acc-home-legacy">
+    <div class="accordion-header" onclick="toggleAccordion(this)">🏛️ Legacy Gallery Section <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>Section Title</label><input type="text" data-page="home" data-field="legacyTitle" placeholder="Explore Our Architectural Legacy"></div>
+      <div class="form-field"><label>Section Description</label><input type="text" data-page="home" data-field="legacyDesc" placeholder="Click the top project to cycle..."></div>
+      <div class="field-row">
+        <div class="form-field"><label>Panel 1 Name</label><input type="text" data-page="home" data-field="legacyPanel1Name" placeholder="The Axis House"></div>
+        <div class="form-field"><label>Panel 1 Meta</label><input type="text" data-page="home" data-field="legacyPanel1Meta" placeholder="Modernist • 3500 sq ft"></div>
+      </div>
+      <div class="field-row">
+        <div class="form-field"><label>Panel 2 Name</label><input type="text" data-page="home" data-field="legacyPanel2Name" placeholder="The Heritage Villa"></div>
+        <div class="form-field"><label>Panel 2 Meta</label><input type="text" data-page="home" data-field="legacyPanel2Meta" placeholder="Traditional • 2800 sq ft"></div>
+      </div>
+      <div class="field-row">
+        <div class="form-field"><label>Panel 3 Name</label><input type="text" data-page="home" data-field="legacyPanel3Name" placeholder="The Colonnade"></div>
+        <div class="form-field"><label>Panel 3 Meta</label><input type="text" data-page="home" data-field="legacyPanel3Meta" placeholder="Neoclassical • 4500 sq ft"></div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="accordion" id="acc-home-about">
+    <div class="accordion-header" onclick="toggleAccordion(this)">ℹ️ About Section <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>About Heading</label><textarea data-page="home" data-field="aboutHeading" rows="3" placeholder="Crafting Architecture with precision and elegance."></textarea></div>
+      <div class="form-field"><label>About Sub-text</label><input type="text" data-page="home" data-field="aboutSub" placeholder="Where timeless design meets modern craftsmanship."></div>
+      <div class="form-field"><label>Specializing Text</label><textarea data-page="home" data-field="aboutSpecializing" rows="4" placeholder="We specialize in creating distinctive spaces..."></textarea></div>
+      <div class="form-field"><label>Precision Text</label><textarea data-page="home" data-field="aboutPrecision" rows="4" placeholder="With precision in execution..."></textarea></div>
+    </div></div>
+  </div>
+
+  <div class="accordion" id="acc-home-services">
+    <div class="accordion-header" onclick="toggleAccordion(this)">🔧 Services Section <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>Services Label</label><input type="text" data-page="home" data-field="servicesLabel" placeholder="What We Offer"></div>
+      <div class="form-field"><label>Services Heading</label><input type="text" data-page="home" data-field="servicesHeading" placeholder="Our Services"></div>
+      <div class="form-field"><label>Services Description</label><textarea data-page="home" data-field="servicesDesc" rows="3" placeholder="At Plankraft Engineers & Builders..."></textarea></div>
+      <div class="form-field"><label>CEO Review Text</label><textarea data-page="home" data-field="ceoReviewText" rows="2" placeholder="Plankraft exceeded my expectations..."></textarea></div>
+      <div class="field-row">
+        <div class="form-field"><label>CEO Name</label><input type="text" data-page="home" data-field="ceoName" placeholder="Abdul Razik"></div>
+        <div class="form-field"><label>CEO Role</label><input type="text" data-page="home" data-field="ceoRole" placeholder="CEO, Director"></div>
+      </div>
+      <hr style="border-color:var(--border);margin:1.5rem 0">
+      <p class="text-sm text-muted mb-2">Service Cards (4):</p>
+      <div class="field-row"><div class="form-field"><label>Card 1 Title</label><input type="text" data-page="home" data-field="svcCard1Title" placeholder="Exterior Design Concept"></div><div class="form-field"><label>Card 1 Description</label><textarea data-page="home" data-field="svcCard1Desc" rows="2"></textarea></div></div>
+      <div class="field-row"><div class="form-field"><label>Card 2 Title</label><input type="text" data-page="home" data-field="svcCard2Title" placeholder="General Contracting"></div><div class="form-field"><label>Card 2 Description</label><textarea data-page="home" data-field="svcCard2Desc" rows="2"></textarea></div></div>
+      <div class="field-row"><div class="form-field"><label>Card 3 Title</label><input type="text" data-page="home" data-field="svcCard3Title" placeholder="Modern Furniture Layouts"></div><div class="form-field"><label>Card 3 Description</label><textarea data-page="home" data-field="svcCard3Desc" rows="2"></textarea></div></div>
+      <div class="field-row"><div class="form-field"><label>Card 4 Title</label><input type="text" data-page="home" data-field="svcCard4Title" placeholder="House / Apartment Renovation"></div><div class="form-field"><label>Card 4 Description</label><textarea data-page="home" data-field="svcCard4Desc" rows="2"></textarea></div></div>
+    </div></div>
+  </div>
+
+  <div class="accordion" id="acc-home-gallery">
+    <div class="accordion-header" onclick="toggleAccordion(this)">🖼️ Gallery Section <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>Gallery Label</label><input type="text" data-page="home" data-field="galleryLabel" placeholder="Our Gallery"></div>
+      <div class="form-field"><label>Gallery Title</label><input type="text" data-page="home" data-field="galleryTitle" placeholder="A Showcase of Vision, Craft, and Form"></div>
+      <p class="text-sm text-muted mb-1 mt-2">Bento Items (5):</p>
+      <div class="field-row"><div class="form-field"><label>Item 1 Tag</label><input type="text" data-page="home" data-field="bentoTag1" placeholder="Premium Residential"></div><div class="form-field"><label>Item 1 Title</label><input type="text" data-page="home" data-field="bentoTitle1" placeholder="Modern Malabar Residence"></div></div>
+      <div class="field-row"><div class="form-field"><label>Item 2 Tag</label><input type="text" data-page="home" data-field="bentoTag2" placeholder="Traditional"></div><div class="form-field"><label>Item 2 Title</label><input type="text" data-page="home" data-field="bentoTitle2" placeholder="Kerala Style Elevation"></div></div>
+      <div class="field-row"><div class="form-field"><label>Item 3 Tag</label><input type="text" data-page="home" data-field="bentoTag3" placeholder="Commercial"></div><div class="form-field"><label>Item 3 Title</label><input type="text" data-page="home" data-field="bentoTitle3" placeholder="The Plaza Space"></div></div>
+      <div class="field-row"><div class="form-field"><label>Item 4 Tag</label><input type="text" data-page="home" data-field="bentoTag4" placeholder="Interior"></div><div class="form-field"><label>Item 4 Title</label><input type="text" data-page="home" data-field="bentoTitle4" placeholder="Minimalist Living"></div></div>
+      <div class="field-row"><div class="form-field"><label>Item 5 Tag</label><input type="text" data-page="home" data-field="bentoTag5" placeholder="Residential"></div><div class="form-field"><label>Item 5 Title</label><input type="text" data-page="home" data-field="bentoTitle5" placeholder="Tropical Villa"></div></div>
+    </div></div>
+  </div>
+
+  <div class="accordion" id="acc-home-cta">
+    <div class="accordion-header" onclick="toggleAccordion(this)">📞 CTA Section <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>CTA Title</label><input type="text" data-page="home" data-field="ctaTitle" placeholder="Ready To Build Your Dream Project"></div>
+      <div class="form-field"><label>CTA Button Text</label><input type="text" data-page="home" data-field="ctaBtn" placeholder="Start Your Project"></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ ABOUT PAGE EDITOR ═══ -->
+<div class="section-panel" id="sec-page-about">
+  <div class="page-header">
+    <div><h2>About Page</h2><p class="page-desc">Edit all text content on the about page</p></div>
+    <button class="btn btn-primary" onclick="savePageContent('about')">💾 Save Changes</button>
+  </div>
+  <div class="accordion open">
+    <div class="accordion-header" onclick="toggleAccordion(this)">🏗️ Hero & Statement <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>Hero Top Text</label><textarea data-page="about" data-field="heroTopText" rows="2" placeholder="Our commitment to architectural excellence..."></textarea></div>
+      <div class="form-field"><label>Hero Bottom Text</label><textarea data-page="about" data-field="heroBottomText" rows="2" placeholder="For years, we've been crafting the legacy..."></textarea></div>
+      <div class="form-field"><label>Statement Year</label><input type="text" data-page="about" data-field="statementYear" placeholder="SINCE 2019"></div>
+      <div class="form-field"><label>Statement Heading</label><textarea data-page="about" data-field="statementHeading" rows="2" placeholder="WE HAVE BEEN WRITING THE HISTORY OF ARCHITECTURE..."></textarea></div>
+    </div></div>
+  </div>
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">👁️ Vision & Mission <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>Vision Text</label><textarea data-page="about" data-field="visionText" rows="4" placeholder="Our vision is to be a leading force..."></textarea></div>
+      <div class="form-field"><label>Mission Text</label><textarea data-page="about" data-field="missionText" rows="4" placeholder="Our mission is to provide..."></textarea></div>
+    </div></div>
+  </div>
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">⚙️ Process Steps <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="field-row"><div class="form-field"><label>Step 1 Title</label><input type="text" data-page="about" data-field="step1Title"></div><div class="form-field"><label>Step 1 Desc</label><textarea data-page="about" data-field="step1Desc" rows="2"></textarea></div></div>
+      <div class="field-row"><div class="form-field"><label>Step 2 Title</label><input type="text" data-page="about" data-field="step2Title"></div><div class="form-field"><label>Step 2 Desc</label><textarea data-page="about" data-field="step2Desc" rows="2"></textarea></div></div>
+      <div class="field-row"><div class="form-field"><label>Step 3 Title</label><input type="text" data-page="about" data-field="step3Title"></div><div class="form-field"><label>Step 3 Desc</label><textarea data-page="about" data-field="step3Desc" rows="2"></textarea></div></div>
+      <div class="field-row"><div class="form-field"><label>Step 4 Title</label><input type="text" data-page="about" data-field="step4Title"></div><div class="form-field"><label>Step 4 Desc</label><textarea data-page="about" data-field="step4Desc" rows="2"></textarea></div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ SERVICES PAGE EDITOR ═══ -->
+<div class="section-panel" id="sec-page-services">
+  <div class="page-header">
+    <div><h2>Services Page</h2><p class="page-desc">Edit the dedicated services page</p></div>
+    <button class="btn btn-primary" onclick="savePageContent('services')">💾 Save Changes</button>
+  </div>
+  <div class="accordion open">
+    <div class="accordion-header" onclick="toggleAccordion(this)">📋 Hero & Core Offerings <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>Page Title</label><input type="text" data-page="services" data-field="heroTitle" placeholder="Our Services"></div>
+      <div class="form-field"><label>Page Description</label><textarea data-page="services" data-field="heroDesc" rows="2" placeholder="At Plankraft Engineers & Builders..."></textarea></div>
+      <div class="form-field"><label>Core Offerings Heading</label><input type="text" data-page="services" data-field="coreHeading" placeholder="Our Core Offerings"></div>
+    </div></div>
+  </div>
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">✅ Checklist Items (9) <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner" id="services-checklist-fields"></div></div>
+  </div>
+</div>
+
+<!-- ═══ CONTACT PAGE EDITOR ═══ -->
+<div class="section-panel" id="sec-page-contact">
+  <div class="page-header">
+    <div><h2>Contact Page</h2><p class="page-desc">Edit the contact page content</p></div>
+    <button class="btn btn-primary" onclick="savePageContent('contact')">💾 Save Changes</button>
+  </div>
+  <div class="accordion open">
+    <div class="accordion-header" onclick="toggleAccordion(this)">📧 Contact Content <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>Page Title</label><input type="text" data-page="contact" data-field="heroTitle" placeholder="Get In Touch"></div>
+      <div class="form-field"><label>Page Description</label><textarea data-page="contact" data-field="heroDesc" rows="2" placeholder="Ready to build something extraordinary?..."></textarea></div>
+      <div class="form-field"><label>Section Title</label><input type="text" data-page="contact" data-field="sectionTitle" placeholder="Get In Touch & Contact For More Information!"></div>
+      <div class="form-field"><label>Services List</label><textarea data-page="contact" data-field="servicesList" rows="3" placeholder="Contractors & Supervision • Landscaping..."></textarea></div>
+      <div class="form-field"><label>Form Card Title</label><input type="text" data-page="contact" data-field="formTitle" placeholder="Send Us a Message"></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ GALLERY PAGES EDITOR ═══ -->
+<div class="section-panel" id="sec-page-gallery">
+  <div class="page-header">
+    <div><h2>Gallery Pages</h2><p class="page-desc">Edit gallery, gallery-images, and gallery-videos pages</p></div>
+    <button class="btn btn-primary" onclick="savePageContent('gallery')">💾 Save Changes</button>
+  </div>
+  <div class="accordion open">
+    <div class="accordion-header" onclick="toggleAccordion(this)">🖼️ Gallery Main Page <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>Hero Title</label><input type="text" data-page="gallery" data-field="heroTitle" placeholder="Our Gallery"></div>
+      <div class="form-field"><label>Hero Description</label><textarea data-page="gallery" data-field="heroDesc" rows="2" placeholder="Explore a curated collection..."></textarea></div>
+      <div class="form-field"><label>Image Section Title</label><input type="text" data-page="gallery" data-field="imgSectionTitle" placeholder="Project Images"></div>
+      <div class="form-field"><label>Video Section Title</label><input type="text" data-page="gallery" data-field="vidSectionTitle" placeholder="Project Videos"></div>
+    </div></div>
+  </div>
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">📷 Gallery Images Page <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>Page Title</label><input type="text" data-page="galleryImages" data-field="pageTitle" placeholder="Project Images"></div>
+      <div class="form-field"><label>Page Description</label><input type="text" data-page="galleryImages" data-field="pageDesc" placeholder="A complete collection of our architectural photography..."></div>
+    </div></div>
+  </div>
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">🎥 Gallery Videos Page <span class="arrow">▼</span></div>
+    <div class="accordion-body"><div class="accordion-inner">
+      <div class="form-field"><label>Page Title</label><input type="text" data-page="galleryVideos" data-field="pageTitle" placeholder="Project Videos"></div>
+      <div class="form-field"><label>Page Description</label><input type="text" data-page="galleryVideos" data-field="pageDesc" placeholder="Experience our designs through cinematic walk-throughs..."></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ HERO CAROUSEL ═══ -->
+<div class="section-panel" id="sec-hero">
+  <div class="page-header">
+    <div><h2>Hero Carousel</h2><p class="page-desc">Manage the hero house images and backgrounds</p></div>
+    <button class="btn btn-primary" onclick="saveHeroData()">💾 Save Changes</button>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon violet">🏠</span> Carousel Slides (4)</div>
+    <p class="text-sm text-muted mt-1 mb-2">Toggle visibility of each hero slide.</p>
+    <div id="heroSlidesList"></div>
+  </div>
+</div>
+
+<!-- ═══ REVIEWS ═══ -->
+<div class="section-panel" id="sec-reviews">
+  <div class="page-header">
+    <div><h2>Reviews</h2><p class="page-desc">Manage client testimonials</p></div>
+    <button class="btn btn-primary" onclick="saveReviews()">💾 Save Changes</button>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><span class="icon amber">⭐</span> Reviews Section</div>
+    </div>
+    <div class="form-field">
+      <label>Section Title</label>
+      <input type="text" id="reviews-title" placeholder="What our Clients say about us">
+    </div>
+    <div class="form-field">
+      <label>Subtitle / Link Text</label>
+      <input type="text" id="reviews-subtitle" placeholder="Read reviews from our clients on Google">
+    </div>
+  </div>
+  <div id="reviewCards"></div>
+  <button class="btn btn-ghost mt-2" onclick="addReviewCard()">+ Add Review</button>
+</div>
+
+<!-- ═══ STATS TICKER ═══ -->
+<div class="section-panel" id="sec-ticker">
+  <div class="page-header">
+    <div><h2>Stats Ticker</h2><p class="page-desc">Edit the scrolling stats bar</p></div>
+    <button class="btn btn-primary" onclick="saveTicker()">💾 Save Changes</button>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon coral">📊</span> Ticker Items</div>
+    <p class="text-sm text-muted mt-1 mb-2">Add the items that scroll across the ticker bar. They will repeat automatically.</p>
+    <div id="tickerItems"></div>
+    <button class="btn btn-ghost btn-sm mt-2" onclick="addTickerItem()">+ Add Item</button>
+  </div>
+</div>
+
+<!-- ═══ EXPORT / IMPORT ═══ -->
+<div class="section-panel" id="sec-export">
+  <div class="page-header">
+    <div><h2>Export / Import</h2><p class="page-desc">Backup and restore your CMS data</p></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon emerald">📤</span> Export Data</div>
+      <p class="text-sm text-muted mt-1 mb-2">Download all CMS data as a JSON file. This includes all settings, page content, reviews, ticker items, and media visibility states.</p>
+      <button class="btn btn-success" onclick="exportData()">⬇ Download CMS Backup</button>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon amber">📥</span> Import Data</div>
+      <p class="text-sm text-muted mt-1 mb-2">Upload a previously exported JSON file to restore your CMS data. This will <strong>overwrite</strong> all current settings.</p>
+      <div class="upload-zone" onclick="document.getElementById('importFile').click()" style="margin-bottom:0">
+        <div class="upload-icon">📁</div>
+        <p>Click to select JSON backup file</p>
+      </div>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this.files[0])">
+    </div>
+  </div>
+  <div class="card mt-3">
+    <div class="card-title"><span class="icon red" style="background:rgba(239,68,68,0.15);color:var(--red)">⚠️</span> Danger Zone</div>
+    <p class="text-sm text-muted mt-1 mb-2">Reset all CMS data to defaults. This cannot be undone.</p>
+    <button class="btn btn-danger" onclick="resetAllData()">🗑️ Reset All CMS Data</button>
+  </div>
+</div>
+
+</main>
+</div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════ */
+/*  PLANKRAFT CMS — COMPLETE JAVASCRIPT ENGINE             */
+/* ═══════════════════════════════════════════════════════ */
+
+const CMS_KEY = 'plankraft_cms';
+const AUTH_KEY = 'plankraft_auth';
+
+// ─── DEFAULT DATA ────────────────────────────────────────
+function getDefaultData() {
+  return {
+    settings: {
+      siteTitle: 'PlanKraft',
+      companyName: 'PlanKraft Engineers & Builders',
+      copyright: '© 2019 Copyright All rights reserved by PlanKraft Engineers & Builders.',
+      metaTitle: 'PlanKraft Engineers & Builders | Architecture in Kerala',
+      metaDesc: 'Premium architecture, engineering, and construction services in Calicut, Kerala. Crafting timeless residential and commercial buildings since 2019.',
+      facebook: 'https://www.facebook.com/share/1DqDt3Rjsw/',
+      instagram: 'https://www.instagram.com/plankraft_engineers_builders',
+      whatsapp: 'https://api.whatsapp.com/send/?phone=919645816333&text=Hai+%0D%0AI+want+to+know+more+about+your+service.&type=phone_number&app_absent=0',
+      youtube: 'https://www.youtube.com/@plankraftengineersbuilders8644',
+      address: 'CM Complex, Near Salafi Masjid\nAirport Road, Ramanattukara,\nCalicut, Kerala',
+      email: 'info.plankraft@gmail.com',
+      phone1: '+91 82818 16333',
+      phone2: '+91 96458 16333',
+      mapsUrl: 'https://maps.app.goo.gl/Er46LezjWVYWkQSH8'
+    },
+    pages: { home: {}, about: {}, services: {}, contact: {}, gallery: {}, galleryImages: {}, galleryVideos: {} },
+    reviews: [
+      { text: "If you're seeking a design firm that will bring your aspirations to life, look no further than plan kraft. With their boundless creativity, unwavering professionalism, and an impressive portfolio of successful projects, they are undoubtedly the go-to choice for anyone in search of architectural brilliance.", author: 'Sandra M S', stars: 5 },
+      { text: 'Highly committed team working under this company. I have very good experience with this team.', author: 'Sujith MP', stars: 5 },
+      { text: 'I believe Plancraft Construction offered the best value for our building overhaul and new entrance. We highly recommend Plancraft Construction.', author: 'V P', stars: 5 }
+    ],
+    reviewsTitle: 'What our Clients say about us',
+    reviewsSubtitle: 'Read reviews from our clients on Google',
+    ticker: ['80+ Projects', '1000+ Customers', 'Since 2019', 'Plankraft', 'Calicut'],
+    heroSlides: [
+      { visible: true, label: 'House 1' },
+      { visible: true, label: 'House 2' },
+      { visible: true, label: 'House 3' },
+      { visible: true, label: 'House 4' }
+    ],
+    media: { uploaded: [], hidden: [] }
+  };
+}
+
+// ─── DATA ACCESS ─────────────────────────────────────────
+function getData() {
+  try {
+    const raw = localStorage.getItem(CMS_KEY);
+    if (!raw) return getDefaultData();
+    const d = JSON.parse(raw);
+    const def = getDefaultData();
+    // Merge missing keys
+    for (const k of Object.keys(def)) { if (!(k in d)) d[k] = def[k]; }
+    if (!d.settings) d.settings = def.settings;
+    for (const k of Object.keys(def.settings)) { if (!(k in d.settings)) d.settings[k] = def.settings[k]; }
+    if (!d.pages) d.pages = def.pages;
+    if (!d.media) d.media = def.media;
+    if (!d.reviews) d.reviews = def.reviews;
+    if (!d.ticker) d.ticker = def.ticker;
+    if (!d.heroSlides) d.heroSlides = def.heroSlides;
+    return d;
+  } catch { return getDefaultData(); }
+}
+
+function saveData(d) {
+  localStorage.setItem(CMS_KEY, JSON.stringify(d));
+}
+
+// ─── AUTH ────────────────────────────────────────────────
+function handleLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if (u === 'admin' && p === 'admin') {
+    sessionStorage.setItem(AUTH_KEY, '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminApp').style.display = 'block';
+    initAdmin();
+  } else {
+    const err = document.getElementById('loginError');
+    err.style.display = 'block';
+    err.style.animation = 'none';
+    err.offsetHeight;
+    err.style.animation = 'cardFloat 0.3s ease both';
+  }
+}
+
+function handleLogout() {
+  sessionStorage.removeItem(AUTH_KEY);
+  location.reload();
+}
+
+document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('loginPass').focus(); });
+
+// Check session
+if (sessionStorage.getItem(AUTH_KEY) === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminApp').style.display = 'block';
+  document.addEventListener('DOMContentLoaded', initAdmin);
+} else {
+  document.addEventListener('DOMContentLoaded', () => document.getElementById('loginUser').focus());
+}
+
+// ─── INIT ────────────────────────────────────────────────
+function initAdmin() {
+  loadSettingsUI();
+  loadDashboard();
+  loadMediaManager();
+  loadReviewsUI();
+  loadTickerUI();
+  loadHeroUI();
+  loadPageFields();
+  buildServiceChecklistFields();
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────
+function showSection(id, el) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const sec = document.getElementById('sec-' + id);
+  if (sec) sec.classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+// ─── ACCORDION ───────────────────────────────────────────
+function toggleAccordion(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+// ─── TOAST ───────────────────────────────────────────────
+function showToast(msg, type = 'success') {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = (type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️') + ' ' + msg;
+  c.appendChild(t);
+  setTimeout(() => { t.style.animation = 'toastOut 0.3s ease both'; setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+// ─── CHAR COUNTER ────────────────────────────────────────
+function updateCharCount(input, max) {
+  const len = input.value.length;
+  const el = input.parentElement.querySelector('.char-counter');
+  if (!el) return;
+  el.textContent = len + ' / ' + max;
+  el.className = 'char-counter' + (len > max ? ' over' : len > max * 0.85 ? ' warn' : '');
+  // Update Google preview
+  if (input.id === 'set-metaTitle') document.getElementById('gp-title').textContent = input.value || 'PlanKraft Engineers & Builders';
+  if (input.id === 'set-metaDesc') document.getElementById('gp-desc').textContent = input.value || 'Premium architecture and construction...';
+}
+
+// ─── DASHBOARD ───────────────────────────────────────────
+function loadDashboard() {
+  const d = getData();
+  const stats = [
+    { value: '7', label: 'Pages', color: 'var(--violet)' },
+    { value: (d.media.uploaded || []).length.toString(), label: 'Custom Images', color: 'var(--pink)' },
+    { value: (d.reviews || []).length.toString(), label: 'Reviews', color: 'var(--amber)' },
+    { value: (d.ticker || []).length.toString(), label: 'Ticker Items', color: 'var(--cyan)' }
+  ];
+  document.getElementById('dashStats').innerHTML = stats.map(s =>
+    `<div class="stat-card"><div class="stat-value" style="color:${s.color}">${s.value}</div><div class="stat-label">${s.label}</div></div>`
+  ).join('');
+}
+
+// ─── SETTINGS ────────────────────────────────────────────
+function loadSettingsUI() {
+  const d = getData();
+  const s = d.settings;
+  const fields = ['siteTitle','companyName','copyright','metaTitle','metaDesc','facebook','instagram','whatsapp','youtube','address','email','phone1','phone2','mapsUrl'];
+  fields.forEach(f => {
+    const el = document.getElementById('set-' + f);
+    if (el) el.value = s[f] || '';
+  });
+  updateCharCount(document.getElementById('set-metaTitle'), 60);
+  updateCharCount(document.getElementById('set-metaDesc'), 160);
+}
+
+function saveSettings() {
+  const d = getData();
+  const fields = ['siteTitle','companyName','copyright','metaTitle','metaDesc','facebook','instagram','whatsapp','youtube','address','email','phone1','phone2','mapsUrl'];
+  fields.forEach(f => {
+    const el = document.getElementById('set-' + f);
+    if (el) d.settings[f] = el.value;
+  });
+  saveData(d);
+  showToast('Settings saved successfully!');
+}
+
+// ─── PAGE CONTENT ────────────────────────────────────────
+function loadPageFields() {
+  const d = getData();
+  document.querySelectorAll('[data-page][data-field]').forEach(el => {
+    const page = el.dataset.page;
+    const field = el.dataset.field;
+    if (d.pages[page] && d.pages[page][field]) {
+      el.value = d.pages[page][field];
+    }
+  });
+}
+
+function savePageContent(page) {
+  const d = getData();
+  if (!d.pages[page]) d.pages[page] = {};
+  document.querySelectorAll(`[data-page="${page}"][data-field]`).forEach(el => {
+    const val = el.value.trim();
+    if (val) d.pages[page][el.dataset.field] = val;
+    else delete d.pages[page][el.dataset.field];
+  });
+  saveData(d);
+  showToast(`${page.charAt(0).toUpperCase() + page.slice(1)} page saved!`);
+}
+
+// ─── SERVICES CHECKLIST BUILDER ──────────────────────────
+function buildServiceChecklistFields() {
+  const names = [
+    'Architectural Plans & Estimation','Designing','Residential Buildings',
+    'Commercial Spaces','Renovation & Maintenance Interiors','Engineering Consultants',
+    'Supervision','Contracting','3D Modeling'
+  ];
+  const container = document.getElementById('services-checklist-fields');
+  if (!container) return;
+  container.innerHTML = names.map((n, i) =>
+    `<div class="field-row"><div class="form-field"><label>Item ${i+1} Name</label><input type="text" data-page="services" data-field="check${i}Name" placeholder="${n}"></div><div class="form-field"><label>Item ${i+1} Description</label><textarea data-page="services" data-field="check${i}Desc" rows="2"></textarea></div></div>`
+  ).join('');
+  loadPageFields();
+}
+
+// ─── MEDIA MANAGER ───────────────────────────────────────
+const DEFAULT_IMAGES = [
+  '/assets/1.jpg','/assets/2.jpg','/assets/3.jpg','/assets/4.jpeg','/assets/5.jpeg',
+  '/assets/6.jpeg','/assets/7.jpeg','/assets/8.jpeg','/assets/10.jpg','/assets/9.png'
+];
+
+function loadMediaManager() {
+  const d = getData();
+  // Uploaded media
+  const grid = document.getElementById('mediaGrid');
+  const uploaded = d.media.uploaded || [];
+  if (uploaded.length === 0) {
+    grid.innerHTML = '';
+    document.getElementById('mediaEmpty').style.display = 'block';
+    document.getElementById('mediaCount').textContent = '0 images';
+  } else {
+    document.getElementById('mediaEmpty').style.display = 'none';
+    document.getElementById('mediaCount').textContent = uploaded.length + ' image' + (uploaded.length !== 1 ? 's' : '');
+    grid.innerHTML = uploaded.map((img, i) =>
+      `<div class="media-item${img.hidden ? ' hidden-media' : ''}">
+        <img src="${img.data}" alt="Uploaded ${i+1}">
+        ${img.hidden ? '<div class="media-badge hidden-badge">Hidden</div>' : ''}
+        <div class="media-actions">
+          <button class="action-btn hide-btn" title="${img.hidden ? 'Show' : 'Hide'}" onclick="toggleUploadedMedia(${i})">👁</button>
+          <button class="action-btn del-btn" title="Delete" onclick="deleteUploadedMedia(${i})">✕</button>
+        </div>
+      </div>`
+    ).join('');
+  }
+
+  // Default images visibility
+  const defGrid = document.getElementById('defaultMediaGrid');
+  const hidden = d.media.hidden || [];
+  defGrid.innerHTML = DEFAULT_IMAGES.map((src, i) =>
+    `<div class="media-item${hidden.includes(src) ? ' hidden-media' : ''}" onclick="toggleDefaultImage('${src}')">
+      <img src="${src}" alt="Default ${i+1}">
+      ${hidden.includes(src) ? '<div class="media-badge hidden-badge">Hidden</div>' : '<div class="media-badge" style="background:rgba(16,185,129,0.6)">Visible</div>'}
+    </div>`
+  ).join('');
+}
+
+function handleMediaUpload(files) {
+  if (!files.length) return;
+  const d = getData();
+  if (!d.media.uploaded) d.media.uploaded = [];
+  let processed = 0;
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      d.media.uploaded.push({ data: e.target.result, name: file.name, hidden: false });
+      processed++;
+      if (processed === files.length) {
+        saveData(d);
+        loadMediaManager();
+        loadDashboard();
+        showToast(`${files.length} image(s) uploaded!`);
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function toggleUploadedMedia(idx) {
+  const d = getData();
+  d.media.uploaded[idx].hidden = !d.media.uploaded[idx].hidden;
+  saveData(d);
+  loadMediaManager();
+  showToast('Image visibility updated');
+}
+
+function deleteUploadedMedia(idx) {
+  if (!confirm('Delete this image? This cannot be undone.')) return;
+  const d = getData();
+  d.media.uploaded.splice(idx, 1);
+  saveData(d);
+  loadMediaManager();
+  loadDashboard();
+  showToast('Image deleted', 'error');
+}
+
+function toggleDefaultImage(src) {
+  const d = getData();
+  if (!d.media.hidden) d.media.hidden = [];
+  const idx = d.media.hidden.indexOf(src);
+  if (idx === -1) d.media.hidden.push(src);
+  else d.media.hidden.splice(idx, 1);
+  saveData(d);
+  loadMediaManager();
+  showToast('Image visibility toggled');
+}
+
+// ─── HERO CAROUSEL ───────────────────────────────────────
+function loadHeroUI() {
+  const d = getData();
+  const slides = d.heroSlides || getDefaultData().heroSlides;
+  document.getElementById('heroSlidesList').innerHTML = slides.map((s, i) =>
+    `<div class="card" style="padding:1rem 1.25rem;margin-bottom:0.75rem">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-md">
+          <span style="font-size:1.5rem">🏠</span>
+          <div>
+            <div style="font-weight:600">Slide ${i+1} — ${s.label}</div>
+            <div class="text-sm text-muted">house${i+1}.png + house${i+1}bg.jpg</div>
+          </div>
+        </div>
+        <label class="toggle"><input type="checkbox" ${s.visible ? 'checked' : ''} onchange="toggleHeroSlide(${i},this.checked)"><span class="toggle-slider"></span></label>
+      </div>
+    </div>`
+  ).join('');
+}
+
+function toggleHeroSlide(idx, visible) {
+  const d = getData();
+  d.heroSlides[idx].visible = visible;
+  saveData(d);
+  showToast(`Slide ${idx+1} ${visible ? 'shown' : 'hidden'}`);
+}
+
+function saveHeroData() {
+  showToast('Hero carousel saved!');
+}
+
+// ─── REVIEWS ─────────────────────────────────────────────
+function loadReviewsUI() {
+  const d = getData();
+  document.getElementById('reviews-title').value = d.reviewsTitle || '';
+  document.getElementById('reviews-subtitle').value = d.reviewsSubtitle || '';
+  renderReviewCards(d.reviews || []);
+}
+
+function renderReviewCards(reviews) {
+  document.getElementById('reviewCards').innerHTML = reviews.map((r, i) =>
+    `<div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon amber">⭐</span> Review ${i+1}</div>
+        <button class="btn btn-danger btn-sm" onclick="deleteReview(${i})">✕ Remove</button>
+      </div>
+      <div class="form-field"><label>Review Text</label><textarea id="rev-text-${i}" rows="3">${r.text || ''}</textarea></div>
+      <div class="field-row">
+        <div class="form-field"><label>Author Name</label><input type="text" id="rev-author-${i}" value="${r.author || ''}"></div>
+        <div class="form-field"><label>Stars (1-5)</label><input type="number" id="rev-stars-${i}" value="${r.stars || 5}" min="1" max="5"></div>
+      </div>
+    </div>`
+  ).join('');
+}
+
+function addReviewCard() {
+  const d = getData();
+  d.reviews.push({ text: '', author: '', stars: 5 });
+  saveData(d);
+  loadReviewsUI();
+  showToast('New review added');
+}
+
+function deleteReview(idx) {
+  if (!confirm('Delete this review?')) return;
+  const d = getData();
+  d.reviews.splice(idx, 1);
+  saveData(d);
+  loadReviewsUI();
+  loadDashboard();
+  showToast('Review deleted', 'error');
+}
+
+function saveReviews() {
+  const d = getData();
+  d.reviewsTitle = document.getElementById('reviews-title').value;
+  d.reviewsSubtitle = document.getElementById('reviews-subtitle').value;
+  d.reviews = d.reviews.map((r, i) => ({
+    text: (document.getElementById('rev-text-' + i) || {}).value || r.text,
+    author: (document.getElementById('rev-author-' + i) || {}).value || r.author,
+    stars: parseInt((document.getElementById('rev-stars-' + i) || {}).value) || r.stars
+  }));
+  saveData(d);
+  showToast('Reviews saved!');
+}
+
+// ─── TICKER ──────────────────────────────────────────────
+function loadTickerUI() {
+  const d = getData();
+  const items = d.ticker || [];
+  document.getElementById('tickerItems').innerHTML = items.map((t, i) =>
+    `<div class="flex items-center gap-sm mb-1">
+      <input type="text" class="ticker-input" value="${t}" style="flex:1;padding:0.6rem 1rem;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--ff-body);font-size:0.85rem;outline:none">
+      <button class="btn btn-danger btn-sm" onclick="deleteTickerItem(${i})" style="flex-shrink:0">✕</button>
+    </div>`
+  ).join('');
+}
+
+function addTickerItem() {
+  const d = getData();
+  d.ticker.push('New Item');
+  saveData(d);
+  loadTickerUI();
+  loadDashboard();
+}
+
+function deleteTickerItem(idx) {
+  const d = getData();
+  d.ticker.splice(idx, 1);
+  saveData(d);
+  loadTickerUI();
+  loadDashboard();
+  showToast('Ticker item removed', 'error');
+}
+
+function saveTicker() {
+  const d = getData();
+  const inputs = document.querySelectorAll('.ticker-input');
+  d.ticker = Array.from(inputs).map(i => i.value.trim()).filter(Boolean);
+  saveData(d);
+  loadDashboard();
+  showToast('Ticker saved!');
+}
+
+// ─── EXPORT / IMPORT ─────────────────────────────────────
+function exportData() {
+  const d = getData();
+  const blob = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'plankraft-cms-backup-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Backup downloaded!', 'info');
+}
+
+function importData(file) {
+  if (!file) return;
+  if (!confirm('This will overwrite ALL current CMS data. Continue?')) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const d = JSON.parse(e.target.result);
+      saveData(d);
+      initAdmin();
+      showToast('Data imported successfully!');
+    } catch { showToast('Invalid JSON file', 'error'); }
+  };
+  reader.readAsText(file);
+}
+
+function resetAllData() {
+  if (!confirm('This will DELETE all CMS data and reset to defaults. Are you sure?')) return;
+  if (!confirm('FINAL WARNING: All custom content, settings, and uploaded images will be permanently lost.')) return;
+  localStorage.removeItem(CMS_KEY);
+  initAdmin();
+  showToast('All data reset to defaults', 'error');
+}
+</script>
+</body>
+</html>

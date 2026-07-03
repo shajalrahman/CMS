@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Project Videos | PlanKraft</title>
+    <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico" />
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --text: #ffffff;
+            --muted: #a0a0a0;
+            --accent: #f97316;
+            --radius: 16px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .top-logo {
+          position: absolute;
+          top: 2rem;
+          left: 2.5rem;
+          z-index: 50;
+          width: 75px;
+          height: 75px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .top-logo img {
+          width: 75px;
+          height: 75px;
+          object-fit: contain;
+        }
+
+        /* ═══ HERO ═══ */
+        .page-header {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            background: linear-gradient(to bottom, #111, #0a0a0a);
+        }
+
+        .page-header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .page-header p {
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ═══ GRID ═══ */
+        .videos-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .video-item {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            background: #111;
+            cursor: pointer;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .video-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .video-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Fullscreen: show real size / fit properly */
+        .video-item video:fullscreen,
+        .video-item video:-webkit-full-screen {
+            object-fit: contain;
+            background: #000;
+        }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+
+        .video-item.is-playing .card-overlay {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .play-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255,255,255,0.5);
+            transition: transform 0.3s;
+        }
+
+        .video-item:hover .play-btn {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.3);
+        }
+
+        .play-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+            margin-left: 4px;
+        }
+
+        /* ═══ BACK BUTTON ═══ */
+        .back-nav {
+            margin-top: 5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.8rem 2rem;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: var(--accent);
+            color: #fff;
+            transform: translateX(-5px);
+        }
+
+        /* ═══ FOOTER ═══ */
+        footer {
+            background: #000;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .copyright {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.3);
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .videos-grid { grid-template-columns: 1fr; }
+            .top-logo { top: 1rem; left: 1rem; width: 60px; height: 60px; }
+            .page-header { padding-top: 6rem; }
+        }
+    </style>
+</head>
+<body>
+
+  <div class="top-logo">
+    <a href="/"><img src="/assets/logo.png" alt="Plankraft Logo"></a>
+  </div>
+
+    <header class="page-header">
+        <h1>Project Videos</h1>
+        <p>Experience our designs through cinematic walk-throughs and site documentations.</p>
+    </header>
+
+    <main class="videos-container">
+        <div class="videos-grid" id="videosGrid">
+            <!-- Videos injected by JS -->
+        </div>
+
+        <div class="back-nav">
+            <a href="/gallery/" class="btn-back">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Back to Gallery
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>PlanKraft Engineers & Builders</p>
+        <div class="copyright">
+            © 2019 All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        const allVideos = [
+            { src: '/assets/gallery_videos/edit1.mp4', cat: 'projects' },
+            { src: '/assets/gallery_videos/edit2.mp4', cat: 'projects' },
+            { src: '/assets/gallery_videos/edit3.mp4', cat: 'projects' },
+            { src: '/assets/gallery_videos/aivid1.mp4', cat: 'ai' },
+            { src: '/assets/gallery_videos/aivid2.mp4', cat: 'ai' },
+            { src: '/assets/gallery_videos/raw1.mp4', cat: 'site' },
+            { src: '/assets/gallery_videos/raw2.mp4', cat: 'site' },
+            { src: '/assets/gallery_videos/raw3.mp4', cat: 'site' },
+            { src: '/assets/gallery_videos/raw4.mp4', cat: 'site' },
+        ];
+
+        const grid = document.getElementById('videosGrid');
+        let currentlyPlaying = null;
+
+        allVideos.forEach(v => {
+            const div = document.createElement('div');
+            div.className = 'video-item';
+            div.innerHTML = `
+                <video src="${v.src}#t=0.001" preload="metadata" muted playsinline></video>
+                <div class="card-overlay">
+                    <div class="play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+                </div>
+            `;
+            const overlay = div.querySelector('.card-overlay');
+            overlay.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const video = div.querySelector('video');
+
+                if (currentlyPlaying && currentlyPlaying !== video) {
+                    currentlyPlaying.pause();
+                    currentlyPlaying.muted = true;
+                    currentlyPlaying.removeAttribute('controls');
+                    currentlyPlaying.parentElement.classList.remove('is-playing');
+                }
+
+                if (video.paused) {
+                    video.play();
+                    video.muted = false;
+                    video.setAttribute('controls', '');
+                    video.style.touchAction = 'auto';
+                    div.classList.add('is-playing');
+                    currentlyPlaying = video;
+                }
+            });
+
+            grid.appendChild(div);
+        });
+    </script>
+  <script src="/admin/cms-loader.js"></script>
+</body>
+</html>

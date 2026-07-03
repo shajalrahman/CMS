@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Project Images | PlanKraft</title>
+    <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico" />
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --text: #ffffff;
+            --muted: #a0a0a0;
+            --accent: #f97316;
+            --radius: 12px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .top-logo {
+          position: absolute;
+          top: 2rem;
+          left: 2.5rem;
+          z-index: 50;
+          width: 75px;
+          height: 75px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .top-logo img {
+          width: 75px;
+          height: 75px;
+          object-fit: contain;
+        }
+
+        /* ═══ HERO ═══ */
+        .page-header {
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            background: linear-gradient(to bottom, #111, #0a0a0a);
+        }
+
+        .page-header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .page-header p {
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ═══ GRID ═══ */
+        .images-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .img-item {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            aspect-ratio: 4 / 3;
+            background: #111;
+            cursor: zoom-in;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .img-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .img-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ═══ BACK BUTTON ═══ */
+        .back-nav {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.8rem 2rem;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: var(--accent);
+            transform: translateX(-5px);
+        }
+
+        /* ═══ FOOTER ═══ */
+        footer {
+            background: #000;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 4rem;
+        }
+
+        .copyright {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.3);
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 992px) {
+            .images-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .images-grid { grid-template-columns: 1fr; }
+            .top-logo { top: 1rem; left: 1rem; width: 60px; height: 60px; }
+            .page-header { padding-top: 6rem; }
+        }
+    </style>
+</head>
+<body>
+
+  <div class="top-logo">
+    <a href="/"><img src="/assets/logo.png" alt="Plankraft Logo"></a>
+  </div>
+
+    <header class="page-header">
+        <h1>Project Images</h1>
+        <p>A complete collection of our architectural photography and project renderings.</p>
+    </header>
+
+    <main class="images-container">
+        <div class="images-grid" id="imagesGrid">
+            <!-- Images injected by JS -->
+        </div>
+
+        <div class="back-nav">
+            <a href="/gallery/" class="btn-back">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Back to Gallery
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>PlanKraft Engineers & Builders</p>
+        <div class="copyright">
+            © 2019 All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        const allImages = [
+            '/assets/1.jpg', '/assets/2.jpg', '/assets/3.jpg',
+            '/assets/4.jpeg', '/assets/5.jpeg', '/assets/6.jpeg',
+            '/assets/7.jpeg', '/assets/8.jpeg', '/assets/10.jpg',
+            '/assets/gallery_images/h1i1.jpeg', '/assets/gallery_images/h1i2.jpeg',
+            '/assets/gallery_images/h1i3.jpeg', '/assets/gallery_images/h2i1.jpeg',
+            '/assets/gallery_images/h5i1.jpeg', '/assets/gallery_images/h6i1.jpeg',
+            '/assets/gallery_images/h7i1.jpeg', '/assets/gallery_images/h10i1.jpeg',
+            '/assets/gallery_images/h11i1.jpeg', '/assets/gallery_images/h13i1.png',
+            '/assets/gallery_images/h13i2.png'
+        ];
+
+        const grid = document.getElementById('imagesGrid');
+        allImages.forEach(src => {
+            const div = document.createElement('div');
+            div.className = 'img-item';
+            div.innerHTML = `<img src="${src}" alt="PlanKraft Project" loading="lazy">`;
+            grid.appendChild(div);
+        });
+    </script>
+  <script src="/admin/cms-loader.js"></script>
+</body>
+</html>

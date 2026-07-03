@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Portfolio | PlanKraft</title>
+
+  <style>
+    /* ═══ GLOBAL RESETS & VARS ═══ */
+    :root {
+      --gallery-bg: #ffffff;
+      --gallery-text-main: #1a1a1a;
+      --gallery-text-muted: #6c757d;
+      --gallery-accent: #c2a67e;
+      --gallery-radius: 12px;
+      --ff-head: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--gallery-bg);
+      overflow-x: hidden;
+    }
+
+    /* ═══ IMAGE CAROUSEL SECTION ═══ */
+    .gallery-section {
+      background: #f8f8f8;
+      padding: 5rem 0 4rem;
+      overflow: hidden;
+    }
+
+    .gallery-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ═══ PAGE HERO (Dark Minimalist) ═══ */
+    .page-hero {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      /* Dark overlay for text readability */
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      transform: scale(1.15);
+      /* Zooms the video slightly */
+    }
+
+    .page-hero h1 {
+      position: relative;
+      z-index: 2;
+      font-family: 'Cinzel', serif;
+      font-weight: 900;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #fff;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUpMin 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+    }
+
+    .page-hero p {
+      position: relative;
+      z-index: 2;
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 700px;
+      line-height: 1.7;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUpMin 1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+      margin: 0 auto;
+    }
+
+    @keyframes fadeUpMin {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ═══ IMAGE CAROUSEL ═══ */
+    .img-carousel-viewport {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding: 1rem 0;
+      cursor: grab;
+    }
+
+    .img-carousel-viewport:active {
+      cursor: grabbing;
+    }
+
+    .img-carousel-track {
+      display: flex;
+      gap: 1.2rem;
+      width: max-content;
+      animation: marquee-scroll 60s linear infinite;
+    }
+
+    .img-carousel-track.paused {
+      animation-play-state: paused;
+    }
+
+    .img-card {
+      flex-shrink: 0;
+      width: 320px;
+      height: 240px;
+      border-radius: var(--gallery-radius);
+      overflow: hidden;
+      cursor: pointer;
+      background: #e8e8e8;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .img-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+
+    .img-card.active {
+      transform: scale(1.05);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+    }
+
+    .img-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .top-logo {
+      position: absolute;
+      top: 2rem;
+      left: 2.5rem;
+      z-index: 50;
+      width: 75px;
+      height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .top-logo img {
+      width: 75px;
+      height: 75px;
+      object-fit: contain;
+    }
+
+    /* ═══ VIDEO CAROUSEL SECTION ═══ */
+    .video-gallery-section {
+      background: #f0f0f0;
+      padding: 5rem 0 4rem;
+      overflow: hidden;
+    }
+
+    .video-section-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding: 0 5%;
+    }
+
+    .video-section-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--gallery-accent);
+      background: rgba(194, 166, 126, 0.12);
+      padding: 0.4rem 1.2rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .video-section-title {
+      font-family: var(--ff-head);
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      color: var(--gallery-text-main);
+      margin: 0 0 2rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* ═══ FILTER TABS ═══ */
+    .video-filter-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      padding: 0 5%;
+      margin-bottom: 2.5rem;
+    }
+
+    .filter-tab {
+      padding: 0.55rem 1.4rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      color: rgba(0, 0, 0, 0.5);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .filter-tab:hover {
+      background: rgba(0, 0, 0, 0.06);
+      color: #111;
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .filter-tab.active {
+      background: #1a1a1a;
+      color: #fff;
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    /* ═══ CAROUSEL TRACK ═══ */
+    .carousel-viewport {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding: 1rem 0;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+      animation: marquee-scroll 40s linear infinite;
+    }
+
+    .carousel-track.paused {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ═══ VIDEO CARDS (Carousel) ═══ */
+    .video-card {
+      position: relative;
+      flex-shrink: 0;
+      width: 380px;
+      height: 260px;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      background: #111;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .video-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    .video-card.is-playing {
+      transform: scale(1.05);
+      z-index: 10;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    .video-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-card .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.4s ease;
+      z-index: 2;
+    }
+
+    .video-card .card-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .card-label {
+      position: absolute;
+      bottom: 1rem;
+      left: 1.2rem;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+      z-index: 3;
+    }
+
+    .card-play {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, background 0.3s ease;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      z-index: 5;
+    }
+
+    .video-card:hover .card-play {
+      transform: scale(1.12);
+      background: rgba(255,255,255,0.25);
+    }
+
+    .card-play svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+      margin-left: 3px;
+    }
+
+    /* Fullscreen: fit portrait videos properly */
+    .video-card video:fullscreen,
+    .video-card video:-webkit-full-screen {
+      object-fit: contain;
+      background: #000;
+    }
+
+    /* ═══ FOOTER ═══ */
+    footer {
+      background: #1a1a1a;
+      color: #ffffff;
+      padding: 3.5rem 4rem 0;
+      font-family: 'Manrope', sans-serif;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 2.5rem;
+      padding-bottom: 2.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer-brand-col .footer-logo {
+      height: 48px;
+      width: auto;
+      margin-bottom: 1rem;
+      filter: brightness(1.1);
+    }
+
+    .footer-brand-col .footer-desc {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      max-width: 280px;
+    }
+
+    .footer-col-title {
+      font-family: var(--ff-head, 'Epilogue', sans-serif);
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.02em;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .footer-links li a {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .footer-links li a::before {
+      content: '+';
+      color: #f97316;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .footer-links li a:hover {
+      color: #f97316;
+      padding-left: 4px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .social-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .social-btn:hover {
+      background: rgba(249, 115, 22, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .social-btn svg {
+      width: 15px;
+      height: 15px;
+      fill: white;
+    }
+
+    .footer-contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      margin-bottom: 0.9rem;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.5;
+    }
+
+    .footer-contact-item svg {
+      width: 16px;
+      height: 16px;
+      fill: #f97316;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .footer-contact-item a {
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-contact-item a:hover {
+      color: #f97316;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 1.5rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: clamp(0.55rem, 2.5vw, 0.78rem);
+      color: rgba(255, 255, 255, 0.35);
+      white-space: nowrap;
+    }
+
+    .footer-bottom a {
+      color: #f97316;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 0.3rem;
+    }
+
+    /* ═══ RESPONSIVE MEDIA QUERIES ═══ */
+    @media (max-width: 992px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-brand-col {
+        grid-column: 1 / -1;
+      }
+
+      footer {
+        padding: 3rem 3rem 0;
+      }
+
+      .video-card {
+        width: 320px;
+        height: 220px;
+      }
+
+      .img-card {
+        width: 280px;
+        height: 210px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .gallery-section,
+      .video-gallery-section {
+        padding: 3rem 0;
+      }
+
+      .top-logo {
+        top: 1.5rem;
+        left: 1.5rem;
+        width: 60px;
+        height: 60px;
+      }
+
+      .top-logo img {
+        width: 60px;
+        height: 60px;
+      }
+
+      footer {
+        padding: 2rem 1.25rem 0;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+
+      .footer-brand-col {
+        grid-column: 1 / -1;
+      }
+
+      .footer-grid > div:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .footer-bottom {
+        text-align: center;
+      }
+
+      .page-hero {
+        min-height: 100dvh;
+        padding: 4rem 1.5rem;
+      }
+
+      .consult-btn {
+        top: 1.5rem;
+        right: 1.25rem;
+        padding: 0.45rem 0.9rem;
+        font-size: 0.65rem;
+      }
+
+      .page-hero h1 {
+        font-size: clamp(1.8rem, 8vw, 3rem);
+      }
+
+      .page-hero p {
+        font-size: 0.95rem;
+      }
+
+      .video-section-title {
+        font-size: 1.5rem;
+      }
+
+      .video-card {
+        width: 260px;
+        height: 180px;
+      }
+
+      .img-card {
+        width: 240px;
+        height: 180px;
+      }
+
+      .card-play {
+        width: 44px;
+        height: 44px;
+      }
+
+      .card-play svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .filter-tab {
+        padding: 0.45rem 1rem;
+        font-size: 0.72rem;
+      }
+    }
+
+    /* ═══ VIEW ALL BUTTON ═══ */
+    .view-all-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gallery-text-main);
+      text-decoration: none;
+      padding: 0.6rem 1.4rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 999px;
+      margin-top: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .view-all-btn:hover {
+      background: var(--gallery-text-main);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .video-gallery-section .view-all-btn {
+      border-color: rgba(0,0,0,0.15);
+    }
+
+    /* ═══ CONSULTATION BUTTON ═══ */
+    .consult-btn {
+      position: absolute;
+      top: 2.5rem;
+      right: 1.5rem;
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.4rem;
+      background: #fff;
+      color: #1a1a1a;
+      text-decoration: none;
+      border-radius: 999px;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .consult-btn:hover {
+      background: #1a1a1a;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .consult-btn svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top-logo">
+    <a href="/"><img src="/assets/logo.png" alt="Plankraft Logo"></a>
+  </div>
+
+  <section class="page-hero">
+    <a href="/contact/" class="consult-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      Get a Free Consultation
+    </a>
+    <video src="/assets/gallery_videos/gallery_header.mp4" autoplay muted loop playsinline preload="auto"
+      class="hero-video"></video>
+    <h1>Our Gallery</h1>
+    <p>Explore a curated collection of our finest architectural and design innovations.</p>
+  </section>
+
+  <section class="gallery-section" id="gallery">
+
+    <div class="video-section-header">
+      <div class="video-section-label">Portfolio</div>
+      <h2 class="video-section-title">Project Images</h2>
+      <a href="/gallery-images/" class="view-all-btn">
+        View All Images
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+
+    <div class="img-carousel-viewport" id="imgViewport">
+      <div class="img-carousel-track" id="imgTrack">
+        <!-- Cards injected by JS -->
+      </div>
+    </div>
+
+  </section>
+
+  <section class="video-gallery-section" id="video-gallery">
+
+    <div class="video-section-header">
+      <div class="video-section-label">Showreel</div>
+      <h2 class="video-section-title">Project Videos</h2>
+      <a href="/gallery-videos/" class="view-all-btn">
+        View All Videos
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+
+    <div class="video-filter-tabs">
+      <button class="filter-tab active" data-filter="projects">Projects</button>
+      <button class="filter-tab" data-filter="ai">AI Videos</button>
+      <button class="filter-tab" data-filter="site">Site Footages</button>
+      <button class="filter-tab" data-filter="all">All</button>
+    </div>
+
+    <div class="carousel-viewport">
+      <div class="carousel-track" id="carouselTrack">
+        <!-- Cards injected by JS -->
+      </div>
+    </div>
+
+  </section>
+
+  <footer id="footer">
+    <div class="footer-grid">
+      <div class="footer-brand-col">
+        <img src="/assets/logo.png" alt="Plankraft Logo" class="footer-logo">
+        <p class="footer-desc">Plankraft Engineers & Builders — crafting timeless architecture with precision, elegance,
+          and modern engineering excellence across Kerala.</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/share/1DqDt3Rjsw/" target="_blank" rel="noopener" class="social-btn"
+            aria-label="Facebook">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/plankraft_engineers_builders?igsh=ZjlrcGZ1cWRrYWxh" target="_blank"
+            rel="noopener" class="social-btn" aria-label="Instagram">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+            </svg>
+          </a>
+          <a href="https://api.whatsapp.com/send/?phone=919645816333&text=Hai+%0D%0AI+want+to+know+more+about+your+service.&type=phone_number&app_absent=0"
+            target="_blank" rel="noopener" class="social-btn" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+          </a>
+          <a href="https://www.youtube.com/@plankraftengineersbuilders8644" target="_blank" rel="noopener"
+            class="social-btn" aria-label="YouTube">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-col-title">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="/#hero">Homepage</a></li>
+          <li><a href="/#latest">Our Projects</a></li>
+          <li><a href="/#about">About Us</a></li>
+          <li><a href="/#services">Services</a></li>
+          <li><a href="/#gallery">Gallery</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-col-title">Other Pages</h4>
+        <ul class="footer-links">
+          <li><a href="/about/">About Us</a></li>
+          <li><a href="/services/">Our Services</a></li>
+          <li><a href="/gallery/">Full Gallery</a></li>
+          <li><a href="/contact/">Get a Quote</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-col-title">Contact Info</h4>
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+          </svg>
+          <a href="https://maps.app.goo.gl/Er46LezjWVYWkQSH8" target="_blank" rel="noopener">Calicut, Kerala, India</a>
+        </div>
+        <div class="footer-contact-item">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          <a href="mailto:Info.plankraft@gmail.com">Info.plankraft@gmail.com</a>
+        </div>
+        <div class="footer-contact-item" style="align-items: flex-start;">
+          <svg viewBox="0 0 24 24" style="margin-top: 4px;">
+            <path
+              d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+          </svg>
+          <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+            <a href="tel:+918281816333">+91 82818 16333</a>
+            <a href="tel:+919645816333">+91 96458 16333</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2019 Copyright All rights reserved by <a href="/#hero">PlanKraft Engineers &amp; Builders</a>.
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      // ═══ IMAGE CAROUSEL ═══
+      const allImages = [
+        '/assets/1.jpg', '/assets/2.jpg', '/assets/3.jpg',
+        '/assets/4.jpeg', '/assets/5.jpeg', '/assets/6.jpeg',
+        '/assets/7.jpeg', '/assets/8.jpeg', '/assets/10.jpg',
+        '/assets/gallery_images/h1i1.jpeg', '/assets/gallery_images/h1i2.jpeg',
+        '/assets/gallery_images/h1i3.jpeg', '/assets/gallery_images/h2i1.jpeg',
+        '/assets/gallery_images/h5i1.jpeg', '/assets/gallery_images/h6i1.jpeg',
+        '/assets/gallery_images/h7i1.jpeg', '/assets/gallery_images/h10i1.jpeg',
+        '/assets/gallery_images/h11i1.jpeg', '/assets/gallery_images/h13i1.png',
+        '/assets/gallery_images/h13i2.png'
+      ];
+
+      const imgTrack = document.getElementById('imgTrack');
+      const imgViewport = document.getElementById('imgViewport');
+      let imgPaused = false;
+
+      // Build image track (doubled for infinite loop)
+      [...allImages, ...allImages].forEach(src => {
+        const card = document.createElement('div');
+        card.className = 'img-card';
+        card.innerHTML = `<img src="${src}" alt="PlanKraft Project" loading="lazy">`;
+        imgTrack.appendChild(card);
+      });
+
+      imgTrack.style.animationDuration = (allImages.length * 3) + 's';
+
+      // Click to pause/resume images
+      imgTrack.addEventListener('click', function (e) {
+        const card = e.target.closest('.img-card');
+        if (card) {
+          e.stopPropagation();
+          if (imgPaused) {
+            imgTrack.classList.remove('paused');
+            document.querySelectorAll('.img-card.active').forEach(c => c.classList.remove('active'));
+            imgPaused = false;
+          } else {
+            imgTrack.classList.add('paused');
+            card.classList.add('active');
+            imgPaused = true;
+          }
+        }
+      });
+
+      // Click outside image carousel to resume
+      document.addEventListener('click', function (e) {
+        if (imgPaused && !e.target.closest('.img-carousel-viewport')) {
+          imgTrack.classList.remove('paused');
+          document.querySelectorAll('.img-card.active').forEach(c => c.classList.remove('active'));
+          imgPaused = false;
+        }
+      });
+
+      // ═══ Touch Drag for Image Carousel ═══
+      let dragStartX = 0, dragScrollLeft = 0, isDragging = false;
+      const imgStyle = imgTrack.style;
+
+      imgViewport.addEventListener('touchstart', function (e) {
+        isDragging = true;
+        dragStartX = e.touches[0].pageX;
+        imgTrack.classList.add('paused');
+        const cs = getComputedStyle(imgTrack);
+        const matrix = new DOMMatrix(cs.transform);
+        dragScrollLeft = matrix.m41;
+        imgTrack.style.transform = `translateX(${dragScrollLeft}px)`;
+      }, { passive: true });
+
+      imgViewport.addEventListener('touchmove', function (e) {
+        if (!isDragging) return;
+        const x = e.touches[0].pageX;
+        const walk = x - dragStartX;
+        imgTrack.style.transform = `translateX(${dragScrollLeft + walk}px)`;
+      }, { passive: true });
+
+      imgViewport.addEventListener('touchend', function () {
+        isDragging = false;
+        imgTrack.style.transform = '';
+        imgTrack.classList.remove('paused');
+        imgPaused = false;
+      });
+
+      // ═══ VIDEO CAROUSEL ENGINE ═══
+      const allVideos = [
+        { src: '/assets/gallery_videos/edit1.mp4', cat: 'projects' },
+        { src: '/assets/gallery_videos/edit2.mp4', cat: 'projects' },
+        { src: '/assets/gallery_videos/edit3.mp4', cat: 'projects' },
+        { src: '/assets/gallery_videos/aivid1.mp4', cat: 'ai' },
+        { src: '/assets/gallery_videos/aivid2.mp4', cat: 'ai' },
+        { src: '/assets/gallery_videos/raw1.mp4', cat: 'site' },
+        { src: '/assets/gallery_videos/raw2.mp4', cat: 'site' },
+        { src: '/assets/gallery_videos/raw3.mp4', cat: 'site' },
+        { src: '/assets/gallery_videos/raw4.mp4', cat: 'site' },
+      ];
+
+      const track = document.getElementById('carouselTrack');
+      const tabs = document.querySelectorAll('.filter-tab');
+      let playingCard = null;
+
+      function createCard(v) {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.innerHTML = `
+          <video src="${v.src}#t=0.001" preload="metadata" muted playsinline></video>
+          <div class="card-overlay">
+            <div class="card-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          </div>`;
+        return card;
+      }
+
+      function buildTrack(filter) {
+        stopPlaying();
+        track.innerHTML = '';
+        const filtered = filter === 'all' ? allVideos : allVideos.filter(v => v.cat === filter);
+        [...filtered, ...filtered].forEach(v => track.appendChild(createCard(v)));
+        track.style.animationDuration = Math.max(15, filtered.length * 6) + 's';
+        track.classList.remove('paused');
+        attachCardEvents();
+      }
+
+      function stopPlaying() {
+        if (playingCard) {
+          const vid = playingCard.querySelector('video');
+          const ov = playingCard.querySelector('.card-overlay');
+          vid.pause(); vid.removeAttribute('controls');
+          vid.currentTime = 0.001; vid.muted = true;
+          ov.classList.remove('hidden');
+          playingCard.classList.remove('is-playing');
+          playingCard = null;
+        }
+      }
+
+      function attachCardEvents() {
+        track.querySelectorAll('.video-card').forEach(card => {
+          const overlay = card.querySelector('.card-overlay');
+          overlay.addEventListener('click', function (e) {
+            e.stopPropagation();
+            stopPlaying();
+            const vid = card.querySelector('video');
+            vid.setAttribute('controls', ''); vid.muted = false;
+            vid.style.touchAction = 'auto';
+            this.classList.add('hidden');
+            vid.play().catch(() => {});
+            card.classList.add('is-playing');
+            playingCard = card;
+            track.classList.add('paused');
+          });
+
+          card.querySelector('video').addEventListener('ended', function () {
+            const c = this.closest('.video-card');
+            c.querySelector('.card-overlay').classList.remove('hidden');
+            this.removeAttribute('controls');
+            this.currentTime = 0.001; this.muted = true;
+            c.classList.remove('is-playing');
+            playingCard = null;
+            track.classList.remove('paused');
+          });
+        });
+      }
+
+      // Click outside video to resume
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.video-card') && playingCard) {
+          stopPlaying();
+          track.classList.remove('paused');
+        }
+      });
+
+      // Filter tabs
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function () {
+          tabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          buildTrack(this.dataset.filter);
+        });
+      });
+
+      buildTrack('projects');
+    });
+  </script>
+  <script src="/admin/cms-loader.js"></script>
+</body>
+
+</html>
